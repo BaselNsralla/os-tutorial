@@ -16,7 +16,7 @@ value for, say, `ds`, then all your memory access will be offset by `ds`.
 [Read more here](http://wiki.osdev.org/Segmentation)
 
 Furthermore, to compute the real address we don't just join the two
-addresses, but we *overlap* them: `segment << 4 + address`. For example,
+addresses, but we *overlap* them: `segment << 4 + address`. For example, ; 0x4d * 16
 if `ds` is `0x4d`, then `[0x20]` actually refers to `0x4d0 + 0x20 = 0x4f0`
 
 Enough theory. Have a look at the code and play with it a bit.
