@@ -4,8 +4,8 @@ HEADERS = $(wildcard kernel/*.h drivers/*.h)
 OBJ = ${C_SOURCES:.c=.o}
 
 # Change this if your cross-compiler is somewhere else
-CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
-GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
+CC = i386-elf-gcc
+GDB = i386-elf-gdb
 # -g: Use debugging symbols in gcc
 CFLAGS = -g
 
@@ -26,6 +26,8 @@ run: os-image.bin
 	qemu-system-i386 -fda os-image.bin
 
 # Open the connection to qemu and load our kernel-object file with symbols
+# Switched places, seems like qemu is running beast mode eating the cpu
+# GDB is not fast enoughe to connect to it before it runs the code
 debug: os-image.bin kernel.elf
 	qemu-system-i386 -s -fda os-image.bin &
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
