@@ -1,0 +1,21 @@
+void memory_copy(char* source, char* dest, int nbytes) { // skulle vilja ha den usize
+
+  int i;
+  for (i = 0; i < nbytes; ++i) {
+    source[i] = dest[i];
+  }
+}
+
+
+void int_to_s(int source, char* dest) {
+  int sign, i;
+  if ((sign = source) < 0) {source = -source; }
+
+  do {
+    dest[i++] = source % 10 + '0';
+  } while((source /= 10) > 0);
+
+  if (sign > 0) dest[i++] = '-';
+  dest[i] = '\0';
+
+}
