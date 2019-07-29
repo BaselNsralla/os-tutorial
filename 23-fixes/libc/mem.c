@@ -20,14 +20,24 @@ uint32_t free_mem_addr = 0x10000;
  * keeps growing */
 uint32_t kmalloc(size_t size, int align, uint32_t *phys_addr) {
     /* Pages are aligned to 4K, or 0x1000 */
+    
+    // size kan vara mer än 4Kb det kommer ändå maskas
+
     if (align == 1 && (free_mem_addr & 0xFFFFF000)) {
-        free_mem_addr &= 0xFFFFF000;
-        free_mem_addr += 0x1000;
+        free_mem_addr &= 0xFFFFF000;//maskar bort skräp från förra custom size
+                                    //som ändå va mindre än 4kb
+        free_mem_addr += 0x1000; // lägger till ny 4kb
+                                // två allokeringar måste ligga
+                                // i två olika pages
     }
     /* Save also the physical address */
     if (phys_addr) *phys_addr = free_mem_addr;
 
-    uint32_t ret = free_mem_addr;
-    free_mem_addr += size; /* Remember to increment the pointer */
+    uint32_t ret = free_mem_addr; // ret är nu starten på fria minnet
+    free_mem_addr += size; // sätter pekaren till sizen som används, slutet av 
+                           // förgående allokering
+
+    // när du skriver till pekaren som du retunerar så
+    // får den inte skriva till nåt > free_mem_addr
     return ret;
 }
